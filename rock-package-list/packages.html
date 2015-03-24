@@ -63,6 +63,7 @@ function addTableLine(target, pkg_name, pkg_homepage, pkg_wiki, pkg_ghpage, pkg_
 	//getContrib(pkg_contrib,contrib_target_name);
 	var link = document.createElement('a');
 	link.setAttribute("href","https://github.com/"+target+"/"+pkg_name+"/graphs/contributors");
+	link.innerHTML="Link";
 	contrib.appendChild(link);
 	
 	//finally add the table line
@@ -105,7 +106,7 @@ function loadOrganization(name){
  		//addTableLine(name,"package", "homepage", "wiki", "gh-page", "collaborators");
 		var tr = document.createElement('tr');
 		table.appendChild(tr);
-		tr.innerHTML = "<td>Name</td><td>Homepage</td><td>Wiki</td><td>GH Page</td><td>Issues</td>"
+		tr.innerHTML = "<td>Name</td><td>Homepage</td><td>Wiki</td><td>GH Page</td><td>Issues</td><td>Contributors</td>"
 
 		result.forEach(function(elem){
 			//console.log(elem);
