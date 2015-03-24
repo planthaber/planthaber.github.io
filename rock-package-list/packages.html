@@ -85,7 +85,7 @@ function addEntry(package_entry, target){
 		ghpage = "http://" + target + ".github.io/" + package_entry.name;
 	}
 	
-	addTableLine(target,package_entry.name,package_entry.homepage,wiki,ghpage,package_entry.open_issues_count,package_entry.contributors_url);
+	addTableLine(target,package_entry.name,package_entry.homepage,wiki,ghpage,package_entry.open_issues,package_entry.contributors_url);
 
 }
 
@@ -106,7 +106,7 @@ function loadOrganization(name){
  		//addTableLine(name,"package", "homepage", "wiki", "gh-page", "collaborators");
 		var tr = document.createElement('tr');
 		table.appendChild(tr);
-		tr.innerHTML = "<td><b>Name</b></td><td><b>Homepage</b></td><td><b>Wiki</b></td><td><b>GH Page</b></td><td><b>Issues</b></td><td><b>Contributors</b></td>"
+		tr.innerHTML = "<td><b>Name</b></td><td><b>Homepage</b></td><td><b>Wiki</b></td><td><b>GH Page</b></td><td><b>Issues/PRs</b></td><td><b>Contributors</b></td>"
 
 		result.forEach(function(elem){
 			//console.log(elem);
