@@ -63,7 +63,7 @@ function addTableLine(target, pkg_name, pkg_homepage, pkg_wiki, pkg_ghpage, pkg_
 	//getContrib(pkg_contrib,contrib_target_name);
 	var link = document.createElement('a');
 	link.setAttribute("href","https://github.com/"+target+"/"+pkg_name+"/graphs/contributors");
-	
+	contrib.appendChild(link);
 	
 	//finally add the table line
 	table.appendChild(tr);
