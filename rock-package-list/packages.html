@@ -38,15 +38,15 @@ function addTableLine(target, pkg_name, pkg_homepage, pkg_wiki, pkg_ghpage, pkg_
 	links2.appendChild(wiki);
 	links3.appendChild(ghpage);
 	
-	if (pkg_homepage != ""){
+	if (pkg_homepage != null && pkg_homepage != ""){
 		hp.setAttribute("href",pkg_homepage);
 		hp.innerHTML = "HP"
 	}
-	if (pkg_wiki != ""){
+	if (pkg_wiki  != null && pkg_wiki != ""){
 		wiki.setAttribute("href",pkg_wiki);
 		wiki.innerHTML = "Wiki"
 	}
-	if (pkg_ghpage != ""){
+	if (pkg_ghpage != null && pkg_ghpage != ""){
 		ghpage.setAttribute("href",pkg_ghpage);
 		ghpage.innerHTML = "gh-page"
 	}
@@ -76,11 +76,11 @@ function addTableLine(target, pkg_name, pkg_homepage, pkg_wiki, pkg_ghpage, pkg_
 
 function addEntry(package_entry, target){
 	
-	var wiki = "";
+	var wiki = null;
 	if (package_entry.has_wiki){
 		wiki = "https://github.com/" + target + "/" + package_entry.name + "/wiki";
 	}
-	var ghpage = "";
+	var ghpage = null;
 	if (package_entry.has_pages){
 		ghpage = "http://" + target + ".github.io/" + package_entry.name;
 	}
