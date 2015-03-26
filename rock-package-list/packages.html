@@ -11,67 +11,81 @@
 
 <script>
 
-function addTableLine(target, pkg_name, pkg_homepage, pkg_wiki, pkg_ghpage, pkg_issues, pkg_contrib){
+function ifPageExists(url,true_cb,false_cb){
+	$.ajax({
+	    type: 'HEAD',
+	    url: url,
+	success: true_cb,
+	error: false_cb
+	});
+}
+
+function addTableLine(target, pkg_name, pkg_repo, pkg_homepage, pkg_wiki, pkg_ghpage, pkg_issues, pkg_contrib){
 	var table = document.getElementById(target);
 	var tr = document.createElement('tr');
 	var name = document.createElement('td');
-	var links1 = document.createElement('td');
-	var links2 = document.createElement('td');
-	var links3 = document.createElement('td');
-	var issues = document.createElement('td');
-	var contrib = document.createElement('td');
+
+	var links = document.createElement('td');
+	links.setAttribute("style","text-align:right;");
 	
+	var iss = document.createElement('td');
+
 	tr.appendChild(name);
-	tr.appendChild(links1);
-	tr.appendChild(links2);
-	tr.appendChild(links3);
-	tr.appendChild(issues);
-	tr.appendChild(contrib);
+	tr.appendChild(iss);
+	tr.appendChild(links);
 	
-	name.innerHTML=pkg_name;
+	var name_a = document.createElement('a');
+	var issues = document.createElement('a');	
+	name_a.setAttribute("href",pkg_repo);
+	name_a.innerHTML=pkg_name;
+	name.appendChild(name_a);
 	
+
 	var hp = document.createElement('a');
 	var wiki = document.createElement('a');
 	var ghpage = document.createElement('a');
-	
-	links1.appendChild(hp);
-	links2.appendChild(wiki);
-	links3.appendChild(ghpage);
-	
+
+	links.appendChild(hp);
+	links.appendChild(wiki);
+	links.appendChild(ghpage);
+
 	if (pkg_homepage != null && pkg_homepage != ""){
 		hp.setAttribute("href",pkg_homepage);
-		hp.innerHTML = "HP"
+		hp.innerHTML = "[HP]"
 	}
 	if (pkg_wiki  != null && pkg_wiki != ""){
 		wiki.setAttribute("href",pkg_wiki);
-		wiki.innerHTML = "Wiki"
+		wiki.innerHTML = "[Wiki]"
 	}
 	if (pkg_ghpage != null && pkg_ghpage != ""){
 		ghpage.setAttribute("href",pkg_ghpage);
-		ghpage.innerHTML = "gh-page"
+		ghpage.innerHTML = "[gh-page]"
 	}
-		
-	var issues_link = document.createElement('a');
-	issues_link.setAttribute("href","https://github.com/"+target+"/"+pkg_name+"/issues");
-	issues_link.innerHTML = pkg_issues;
-	issues.appendChild(issues_link);
 	
-	var contrib_target_name = target+pkg_name+"collab";
-	contrib.setAttribute("id",contrib_target_name);
+	var apiurl = "http://rock-robotics.org/stable/api/"+"base/console_bridge";
+	ifPageExists(apiurl,function(){
+		var api = document.createElement('a');
+		api.ghpage.setAttribute("href",apiurl);
+		ghpage.innerHTML = "[API]";
+		links.appendChild(api);
+	});
+
+	
+	iss.appendChild(issues);	
+
+	issues.setAttribute("href","https://github.com/"+target+"/"+pkg_name+"/issues");
+	issues.innerHTML = "[Issues: " + pkg_issues +"]";
+
 	//load contribs from GH via api has too many requests (60 per hout allowed),
 	//loading the contribs whould reach the limit on the first load of the packages 
 	//getContrib(pkg_contrib,contrib_target_name);
-	var link = document.createElement('a');
-	link.setAttribute("href","https://github.com/"+target+"/"+pkg_name+"/graphs/contributors");
-	link.innerHTML="Link";
-	contrib.appendChild(link);
+	var contrib = document.createElement('a');
+	contrib.setAttribute("href","https://github.com/"+target+"/"+pkg_name+"/graphs/contributors");
+	contrib.innerHTML="[Contribs]";
+	iss.appendChild(contrib);
 	
 	//finally add the table line
 	table.appendChild(tr);
-	
-
-	
-	
 }
 
 function addEntry(package_entry, target){
@@ -85,7 +99,17 @@ function addEntry(package_entry, target){
 		ghpage = "http://" + target + ".github.io/" + package_entry.name;
 	}
 	
-	addTableLine(target,package_entry.name,package_entry.homepage,wiki,ghpage,package_entry.open_issues,package_entry.contributors_url);
+	var table = document.getElementById(target);
+
+	addTableLine(target,package_entry.name,package_entry.html_url,package_entry.homepage,wiki,ghpage,package_entry.open_issues,package_entry.contributors_url);
+
+	var trdesc = document.createElement('tr');
+	var tddesc = document.createElement('td');
+	tddesc.setAttribute("colspan","3");
+	tddesc.innerHTML=package_entry.description;
+	trdesc.appendChild(tddesc);
+	table.appendChild(trdesc);
+
 
 }
 
@@ -104,9 +128,9 @@ function loadOrganization(name){
 	target.appendChild(org);
  	JSON.load("https://api.github.com/users/" + name + "/repos?page=1&per_page=0", function(result){
  		//addTableLine(name,"package", "homepage", "wiki", "gh-page", "collaborators");
-		var tr = document.createElement('tr');
-		table.appendChild(tr);
-		tr.innerHTML = "<td><b>Name</b></td><td><b>Homepage</b></td><td><b>Wiki</b></td><td><b>GH Page</b></td><td><b>Issues/PRs</b></td><td><b>Contributors</b></td>"
+		//var tr = document.createElement('tr');
+		//table.appendChild(tr);
+		//tr.innerHTML = "<td><b>Name</b></td><td><b>Homepage</b></td><td><b>Wiki</b></td><td><b>GH Page</b></td><td><b>Issues/PRs</b></td><td><b>Contributors</b></td>"
 
 		result.forEach(function(elem){
 			//console.log(elem);
@@ -117,8 +141,8 @@ function loadOrganization(name){
 
 function init(){
 	loadOrganization("rock-core");
-	loadOrganization("rock-planning");
-	loadOrganization("rock-simulation");
+	//loadOrganization("rock-planning");
+	//loadOrganization("rock-simulation");
 	
 }
 
