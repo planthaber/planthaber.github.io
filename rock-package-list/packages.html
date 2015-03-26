@@ -62,7 +62,7 @@ function addTableLine(target, pkg_name, pkg_repo, pkg_homepage, pkg_wiki, pkg_gh
 		ghpage.innerHTML = "[gh-page]"
 	}
 	
-	var apiurl = "http://rock-robotics.org/stable/api/"+"base/console_bridge";
+	var apiurl = "http://rock-robotics.org/stable/api/"+pkg_name.replace("-","/");
 	ifPageExists(apiurl,function(){
 		var api = document.createElement('a');
 		api.setAttribute("href",apiurl);
